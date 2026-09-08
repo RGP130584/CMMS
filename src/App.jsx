@@ -17,6 +17,7 @@ import ListaManutencoes from './pages/ListaManutencoes';
 import Relatorios from './pages/Relatorios';
 import HistoricoMaquina from './pages/HistoricoMaquina';
 import HistoricoGeral from './pages/HistoricoGeral';
+import InstallPrompt from './components/InstallPrompt';
 
 import CatalogoIndex from './pages/catalogo/CatalogoIndex';
 import ListaFabricantes from './pages/catalogo/ListaFabricantes';
@@ -96,6 +97,7 @@ export default function App() {
   return (
     <BrowserRouter>
       <AuthProvider>
+        <InstallPrompt />
         <AppRotas />
       </AuthProvider>
     </BrowserRouter>
