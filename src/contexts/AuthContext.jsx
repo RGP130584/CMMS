@@ -50,7 +50,12 @@ export function AuthProvider({ children }) {
   }, []);
 
   async function login(email, senha) {
-    const usr = await db.usuario.where('email').equals(email.trim()).first();
+    const emailLimpo = email.trim().toLowerCase();
+    // Busca qualquer usuário cadastrado no banco local offline de forma case-insensitive
+    const usr = await db.usuario
+      .filter((u) => u.email && u.email.trim().toLowerCase() === emailLimpo)
+      .first();
+
     if (!usr) {
       throw new Error('E-mail ou senha inválidos');
     }
@@ -65,7 +70,7 @@ export function AuthProvider({ children }) {
     const emp = await db.empresa.get(usr.empresa_id);
     setUsuario(usr);
     setEmpresa(emp);
-    localStorage.setItem('empresa_id', emp.id);
+    localStorage.setItem('empresa_id', emp?.id || usr.empresa_id);
     localStorage.setItem('usuario_id', usr.id);
   }
 

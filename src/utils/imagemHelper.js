@@ -36,3 +36,6 @@ export async function processarFoto(arquivoOuBlob, maxLargura = 1024, maxAltura 
     reader.readAsDataURL(arquivoOuBlob);
   });
 }
+
+export const redimensionarEComprimirImagem = processarFoto;
+

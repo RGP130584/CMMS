@@ -534,33 +534,141 @@ const SVG_DIAGRAMA_PULVERIZACAO = `
 </svg>
 `;
 
+const SVG_DIAGRAMA_PNEUMATICO_CAMINHAO = `
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" width="100%" height="100%">
+  <rect width="800" height="500" rx="12" fill="#0f172a" stroke="#334155" stroke-width="2"/>
+  <text x="400" y="38" fill="#f8fafc" font-size="18" font-weight="bold" font-family="system-ui, sans-serif" text-anchor="middle">CIRCUITO PNEUMÁTICO: SISTEMA DE FREIOS & TRATAMENTO DE AR (APU)</text>
+  <text x="400" y="60" fill="#94a3b8" font-size="12" font-family="system-ui, sans-serif" text-anchor="middle">Caminhões Pesados & Frotas Rodoviárias (Pressão de Trabalho: 10 - 12.5 bar)</text>
+
+  <!-- Compressor de Ar do Motor -->
+  <rect x="60" y="210" width="100" height="80" rx="10" fill="#1e293b" stroke="#f59e0b" stroke-width="3"/>
+  <text x="110" y="245" fill="#f59e0b" font-size="12" font-weight="bold" font-family="system-ui, sans-serif" text-anchor="middle">COMPRESSOR</text>
+  <text x="110" y="265" fill="#94a3b8" font-size="10" font-family="system-ui, sans-serif" text-anchor="middle">2 Cilindros 650cc</text>
+  <circle cx="110" cy="195" r="14" fill="#f59e0b" fill-opacity="0.2"/>
+  <text x="110" y="200" fill="#f59e0b" font-weight="bold" font-size="12" text-anchor="middle">1</text>
+
+  <!-- Serpentina de Resfriamento de Ar -->
+  <path d="M 160 250 L 220 250" fill="none" stroke="#ef4444" stroke-width="5"/>
+  <text x="190" y="240" fill="#ef4444" font-size="10" font-weight="bold" text-anchor="middle">Ar Quente</text>
+
+  <!-- Unidade de Secagem de Ar (APU) com Filtro Dessecante -->
+  <rect x="220" y="190" width="110" height="120" rx="12" fill="#1e293b" stroke="#38bdf8" stroke-width="3"/>
+  <circle cx="275" cy="235" r="25" fill="#0369a1" stroke="#38bdf8" stroke-width="2"/>
+  <text x="275" y="240" fill="#fff" font-size="10" font-weight="bold" text-anchor="middle">REFIL APU</text>
+  <text x="275" y="285" fill="#38bdf8" font-size="11" font-weight="bold" font-family="system-ui, sans-serif" text-anchor="middle">VÁLVULA APU</text>
+  <text x="275" y="300" fill="#94a3b8" font-size="9" font-family="system-ui, sans-serif" text-anchor="middle">Dessecante + Regulador</text>
+  <circle cx="275" cy="175" r="14" fill="#38bdf8" fill-opacity="0.2"/>
+  <text x="275" y="180" fill="#38bdf8" font-weight="bold" font-size="12" text-anchor="middle">2</text>
+
+  <!-- Válvula de Quatro Vias de Proteção -->
+  <path d="M 330 250 L 390 250" fill="none" stroke="#38bdf8" stroke-width="5"/>
+  <rect x="390" y="215" width="80" height="70" rx="8" fill="#334155" stroke="#10b981" stroke-width="2"/>
+  <text x="430" y="245" fill="#10b981" font-size="10" font-weight="bold" text-anchor="middle">VÁLVULA 4 VIAS</text>
+  <text x="430" y="260" fill="#fff" font-size="9" text-anchor="middle">Distribuição Circuitos</text>
+  <circle cx="430" cy="200" r="14" fill="#10b981" fill-opacity="0.2"/>
+  <text x="430" y="205" fill="#10b981" font-weight="bold" font-size="12" text-anchor="middle">3</text>
+
+  <!-- Reservatório Circuito 1 (Freio Traseiro) -->
+  <path d="M 470 230 L 540 160 L 620 160" fill="none" stroke="#38bdf8" stroke-width="4"/>
+  <rect x="620" y="130" width="130" height="55" rx="10" fill="#1e293b" stroke="#38bdf8" stroke-width="2"/>
+  <text x="685" y="155" fill="#f8fafc" font-size="11" font-weight="bold" text-anchor="middle">RESERVATÓRIO 1</text>
+  <text x="685" y="172" fill="#38bdf8" font-size="10" text-anchor="middle">Freio Traseiro (40L)</text>
+  <circle cx="685" cy="115" r="14" fill="#38bdf8" fill-opacity="0.2"/>
+  <text x="685" y="120" fill="#38bdf8" font-weight="bold" font-size="12" text-anchor="middle">4</text>
+
+  <!-- Reservatório Circuito 2 (Freio Dianteiro) -->
+  <path d="M 470 250 L 620 250" fill="none" stroke="#10b981" stroke-width="4"/>
+  <rect x="620" y="225" width="130" height="55" rx="10" fill="#1e293b" stroke="#10b981" stroke-width="2"/>
+  <text x="685" y="250" fill="#f8fafc" font-size="11" font-weight="bold" text-anchor="middle">RESERVATÓRIO 2</text>
+  <text x="685" y="267" fill="#10b981" font-size="10" text-anchor="middle">Freio Dianteiro (30L)</text>
+  <circle cx="685" cy="210" r="14" fill="#10b981" fill-opacity="0.2"/>
+  <text x="685" y="215" fill="#10b981" font-weight="bold" font-size="12" text-anchor="middle">5</text>
+
+  <!-- Reservatório Circuito 3 (Estacionamento & Carreta / Bi-trem) -->
+  <path d="M 470 270 L 540 340 L 620 340" fill="none" stroke="#f59e0b" stroke-width="4"/>
+  <rect x="620" y="320" width="130" height="55" rx="10" fill="#1e293b" stroke="#f59e0b" stroke-width="2"/>
+  <text x="685" y="345" fill="#f8fafc" font-size="11" font-weight="bold" text-anchor="middle">RESERVATÓRIO 3</text>
+  <text x="685" y="362" fill="#f59e0b" font-size="10" text-anchor="middle">Emergência / Carreta</text>
+  <circle cx="685" cy="305" r="14" fill="#f59e0b" fill-opacity="0.2"/>
+  <text x="685" y="310" fill="#f59e0b" font-weight="bold" font-size="12" text-anchor="middle">6</text>
+
+  <!-- Rodapé Técnico -->
+  <rect x="40" y="445" width="720" height="40" rx="6" fill="#0b1329" stroke="#1e293b"/>
+  <text x="55" y="470" fill="#94a3b8" font-size="11" font-family="system-ui, sans-serif">
+    <tspan fill="#38bdf8" font-weight="bold">Manutenção Crítica:</tspan> Troca Refil APU a cada 500h/30.000km | Drenagem de água semanal dos reservatórios | Pressão corte: 12 bar
+  </text>
+</svg>
+`;
+
 export const DIAGRAMAS_PADRAO = [
   {
     numero: 1,
     pagina: 1,
     indice: 0,
     nome: 'Esquema Hidráulico do Levante Traseiro e Válvulas SCV',
+    sistema: 'hidraulica',
     largura: 800,
     altura: 500,
     imagem: gerarSvgDataUrl(SVG_DIAGRAMA_HIDRAULICO),
+    componentes: [
+      { item: 1, nome: 'Reservatório de Óleo Hidráulico 85L', codigo: 'ISO VG 68' },
+      { item: 2, nome: 'Bomba Tandem de Alta Pressão 120 L/min', codigo: 'AL172780' },
+      { item: 3, nome: 'Bloco de Válvulas SCV Remotas', codigo: '84178556' },
+      { item: 4, nome: 'Cilindro de Levante dos 3 Pontos', codigo: '4271842M1' },
+      { item: 5, nome: 'Engates Rápidos Traseiros ISO', codigo: 'SCV-1/2' },
+    ],
   },
   {
     numero: 2,
     pagina: 8,
     indice: 1,
     nome: 'Circuito de Arrefecimento e Rotação de Correias Poly-V',
+    sistema: 'motor',
     largura: 800,
     altura: 500,
     imagem: gerarSvgDataUrl(SVG_DIAGRAMA_ARREFECIMENTO),
+    componentes: [
+      { item: 1, nome: 'Radiador Principal de Alumínio', codigo: 'RE541922' },
+      { item: 2, nome: 'Válvula Termostática Dupla 82°C', codigo: '3782570M1' },
+      { item: 3, nome: 'Bomba d’Água Centrífuga', codigo: 'RE504836' },
+      { item: 4, nome: 'Correia Poly-V do Alternador/Ventilador', codigo: 'R502340' },
+      { item: 5, nome: 'Tensor Automático da Correia', codigo: '3595175M1' },
+    ],
   },
   {
     numero: 3,
     pagina: 15,
     indice: 2,
     nome: 'Fluxograma Hidráulico do Circuito de Pulverização de Barras',
+    sistema: 'pulverizacao',
     largura: 800,
     altura: 500,
     imagem: gerarSvgDataUrl(SVG_DIAGRAMA_PULVERIZACAO),
+    componentes: [
+      { item: 1, nome: 'Tanque de Calda Principal 3.500L', codigo: 'TK-3500' },
+      { item: 2, nome: 'Filtro de Sucção de Linha 50 Mesh', codigo: '84178556' },
+      { item: 3, nome: 'Bomba Centrífuga de Aço Inox', codigo: 'JC-11928' },
+      { item: 4, nome: 'Comando Elétrico de 9 Seções', codigo: 'ST-84920' },
+      { item: 5, nome: 'Bicos Cerâmicos Cone Vazio Anti-Deriva', codigo: '84565884' },
+    ],
+  },
+  {
+    numero: 4,
+    pagina: 22,
+    indice: 3,
+    nome: 'Circuito Pneumático de Freios & Secador de Ar APU (Frotas e Caminhões)',
+    sistema: 'pneumatico',
+    largura: 800,
+    altura: 500,
+    imagem: gerarSvgDataUrl(SVG_DIAGRAMA_PNEUMATICO_CAMINHAO),
+    componentes: [
+      { item: 1, nome: 'Compressor de Ar do Motor 2 Cilindros', codigo: 'COMP-650' },
+      { item: 2, nome: 'Válvula Secadora APU com Refil Dessecante', codigo: 'APU-12B' },
+      { item: 3, nome: 'Válvula Protetora de 4 Circuitos', codigo: 'V4C-WABCO' },
+      { item: 4, nome: 'Reservatório de Ar Freio Traseiro 40L', codigo: 'RES-40' },
+      { item: 5, nome: 'Reservatório de Ar Freio Dianteiro 30L', codigo: 'RES-30' },
+      { item: 6, nome: 'Reservatório de Ar Carreta e Estacionamento', codigo: 'RES-20' },
+    ],
   },
 ];
 
@@ -759,19 +867,24 @@ export async function inicializarCatalogoPadraoSeVazio() {
 
   // 5. Garantir Diagramas Técnicos
   const totalDiagramas = await db.catalogoDiagrama.count();
-  if (totalDiagramas === 0) {
+  if (totalDiagramas < DIAGRAMAS_PADRAO.length) {
     for (const d of DIAGRAMAS_PADRAO) {
-      await db.catalogoDiagrama.add({
-        catalogo_arquivo_id: arqId,
-        numero: d.numero,
-        pagina: d.pagina,
-        indice: d.indice,
-        nome: d.nome,
-        largura: d.largura,
-        altura: d.altura,
-        imagem: d.imagem,
-        criado_em: new Date().toISOString(),
-      });
+      const existe = await db.catalogoDiagrama.where('nome').equals(d.nome).first();
+      if (!existe) {
+        await db.catalogoDiagrama.add({
+          catalogo_arquivo_id: arqId,
+          numero: d.numero,
+          pagina: d.pagina,
+          indice: d.indice,
+          nome: d.nome,
+          sistema: d.sistema || 'geral',
+          largura: d.largura,
+          altura: d.altura,
+          imagem: d.imagem,
+          componentes: d.componentes || [],
+          criado_em: new Date().toISOString(),
+        });
+      }
     }
   }
 
