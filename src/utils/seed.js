@@ -1,5 +1,55 @@
 import db from '../db/database';
 import { salvarPlanoManutencao } from '../services/maquinas';
+import { hashSenha } from './seguranca';
+
+/**
+ * Solicita ao navegador armazenamento persistente (evita que o Safari/Chrome no celular apague o IndexedDB)
+ */
+export async function solicitarPersistenciaArmazenamento() {
+  try {
+    if (navigator.storage && navigator.storage.persist) {
+      const persistido = await navigator.storage.persist();
+      console.log('Armazenamento IndexedDB persistido:', persistido);
+    }
+  } catch (err) {
+    console.warn('Persistência de armazenamento não suportada:', err);
+  }
+}
+
+/**
+ * Garante que exista sempre uma empresa e usuário administrador padrão prontos para login
+ */
+export async function garantirDadosIniciais() {
+  await solicitarPersistenciaArmazenamento();
+
+  const totalUsuarios = await db.usuario.count();
+  if (totalUsuarios > 0) return; // Já possui usuários cadastrados
+
+  // 1. Criar Empresa Padrão
+  const empresaId = await db.empresa.add({
+    documento: '12345678000199',
+    tipo_documento: 'cnpj',
+    razao_social_ou_nome_titular: 'Oficina & Frota Agrícola Central Ltda',
+    nome_propriedade: 'Oficina & Frota Central',
+    tipo_propriedade: 'oficina',
+    criado_em: new Date().toISOString(),
+  });
+
+  // 2. Criar Usuário Administrador Padrão (admin@cmms.com / 123456)
+  const senhaHash = await hashSenha('123456');
+  const usuarioId = await db.usuario.add({
+    empresa_id: empresaId,
+    nome: 'Gestor de Manutenção',
+    email: 'admin@cmms.com',
+    senha_hash: senhaHash,
+    perfil: 'admin',
+    ativo: true,
+    criado_em: new Date().toISOString(),
+  });
+
+  // 3. Carregar Frota Inicial com Planos e O.S.
+  await carregarDadosDemonstracao(empresaId, usuarioId);
+}
 
 export async function carregarDadosDemonstracao(empresaId, usuarioId) {
   // Limpar dados anteriores se existirem

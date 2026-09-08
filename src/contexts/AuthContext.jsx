@@ -2,6 +2,7 @@ import { createContext, useContext, useState, useEffect } from 'react';
 import db from '../db/database';
 import { hashSenha } from '../utils/seguranca';
 import { inicializarCatalogoPadraoSeVazio } from '../db/catalogoPadrao';
+import { garantirDadosIniciais, solicitarPersistenciaArmazenamento } from '../utils/seed';
 
 const AuthContext = createContext(null);
 
@@ -13,11 +14,14 @@ export function AuthProvider({ children }) {
   useEffect(() => {
     async function carregar() {
       try {
-        // Garante que o catálogo padrão de peças esteja disponível
+        await solicitarPersistenciaArmazenamento();
+
+        // Garante que o catálogo e o usuário padrão estejam prontos
         try {
           await inicializarCatalogoPadraoSeVazio();
+          await garantirDadosIniciais();
         } catch (eCat) {
-          console.warn('Aviso ao inicializar catálogo padrão:', eCat);
+          console.warn('Aviso ao inicializar dados padrão:', eCat);
         }
 
         const empresaId = localStorage.getItem('empresa_id');
@@ -45,7 +49,6 @@ export function AuthProvider({ children }) {
     carregar();
   }, []);
 
-
   async function login(email, senha) {
     const usr = await db.usuario.where('email').equals(email.trim()).first();
     if (!usr) {
@@ -58,6 +61,19 @@ export function AuthProvider({ children }) {
     }
     if (!usr.ativo) {
       throw new Error('Usuário desativado');
+    }
+    const emp = await db.empresa.get(usr.empresa_id);
+    setUsuario(usr);
+    setEmpresa(emp);
+    localStorage.setItem('empresa_id', emp.id);
+    localStorage.setItem('usuario_id', usr.id);
+  }
+
+  async function loginRapidoDemo() {
+    await garantirDadosIniciais();
+    const usr = await db.usuario.first();
+    if (!usr) {
+      throw new Error('Nenhum usuário cadastrado');
     }
     const emp = await db.empresa.get(usr.empresa_id);
     setUsuario(usr);
@@ -108,7 +124,7 @@ export function AuthProvider({ children }) {
 
   return (
     <AuthContext.Provider
-      value={{ usuario, empresa, login, onboarding, logout, carregando }}
+      value={{ usuario, empresa, login, loginRapidoDemo, onboarding, logout, carregando }}
     >
       {children}
     </AuthContext.Provider>
