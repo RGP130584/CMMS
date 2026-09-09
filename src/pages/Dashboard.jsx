@@ -163,6 +163,10 @@ export default function Dashboard() {
           <span className="nav-icon">📚</span>
           <span>Catálogos Técnicos</span>
         </Link>
+        <Link to="/usuarios" className="nav-btn" style={{ gridColumn: 'span 2' }}>
+          <span className="nav-icon">👥</span>
+          <span>Gestão de Equipe & Usuários</span>
+        </Link>
       </nav>
 
       {/* Botão de Demonstração */}

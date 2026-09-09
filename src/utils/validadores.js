@@ -53,3 +53,10 @@ export function formatarDocumento(doc) {
 export function formatarHorimetro(valor) {
   return `${Number(valor).toLocaleString('pt-BR')}h`;
 }
+
+export function validarEmail(email) {
+  if (!email || typeof email !== 'string') return false;
+  const limpo = email.trim().toLowerCase();
+  return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(limpo);
+}
+

@@ -88,27 +88,59 @@ export function AuthProvider({ children }) {
   }
 
   async function onboarding(dadosEmpresa, dadosUsuario) {
-    const existingEmpresa = await db.empresa
-      .where('documento')
-      .equals(dadosEmpresa.documento)
+    if (!dadosUsuario.nome || !dadosUsuario.nome.trim()) {
+      throw new Error('O nome do usuário é obrigatório');
+    }
+    if (!dadosUsuario.email || !dadosUsuario.email.trim()) {
+      throw new Error('O e-mail é obrigatório para o cadastro');
+    }
+
+    const emailLimpo = dadosUsuario.email.trim().toLowerCase();
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+    if (!emailRegex.test(emailLimpo)) {
+      throw new Error('Por favor, informe um endereço de e-mail válido (ex: seu.nome@empresa.com)');
+    }
+
+    if (!dadosUsuario.senha_hash || dadosUsuario.senha_hash.length < 6) {
+      throw new Error('A senha deve conter no mínimo 6 caracteres');
+    }
+
+    // Verifica duplicidade de e-mail no sistema
+    const existingUsuario = await db.usuario
+      .filter((u) => u.email && u.email.trim().toLowerCase() === emailLimpo)
       .first();
-    if (existingEmpresa) {
-      throw new Error('Este documento já está cadastrado');
+    if (existingUsuario) {
+      throw new Error('Este e-mail já está cadastrado no sistema');
+    }
+
+    // Verifica duplicidade de documento se informado
+    const docLimpo = dadosEmpresa.documento?.replace(/\D/g, '');
+    if (docLimpo) {
+      const existingEmpresa = await db.empresa
+        .where('documento')
+        .equals(docLimpo)
+        .first();
+      if (existingEmpresa) {
+        throw new Error('Este documento (CPF/CNPJ) já está cadastrado');
+      }
     }
 
     const senhaHashed = await hashSenha(dadosUsuario.senha_hash);
 
     const empresaId = await db.empresa.add({
       ...dadosEmpresa,
+      documento: docLimpo || dadosEmpresa.documento,
       criado_em: new Date().toISOString(),
     });
 
     const usuarioId = await db.usuario.add({
       empresa_id: empresaId,
-      ...dadosUsuario,
+      nome: dadosUsuario.nome.trim(),
+      email: emailLimpo,
       senha_hash: senhaHashed,
       perfil: 'admin',
       ativo: true,
+      criado_em: new Date().toISOString(),
     });
 
     const emp = await db.empresa.get(empresaId);
@@ -116,8 +148,41 @@ export function AuthProvider({ children }) {
 
     setEmpresa(emp);
     setUsuario(usr);
-    localStorage.setItem('empresa_id', empresaId);
-    localStorage.setItem('usuario_id', usuarioId);
+    localStorage.setItem('empresa_id', String(empresaId));
+    localStorage.setItem('usuario_id', String(usuarioId));
+  }
+
+  async function cadastrarUsuarioEquipe(dados) {
+    if (!empresa) throw new Error('Nenhuma empresa ativa selecionada');
+    if (!dados.nome || !dados.nome.trim()) throw new Error('Nome é obrigatório');
+    if (!dados.email || !dados.email.trim()) throw new Error('E-mail é obrigatório');
+
+    const emailLimpo = dados.email.trim().toLowerCase();
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+    if (!emailRegex.test(emailLimpo)) {
+      throw new Error('E-mail inválido');
+    }
+
+    const existingUsuario = await db.usuario
+      .filter((u) => u.email && u.email.trim().toLowerCase() === emailLimpo)
+      .first();
+    if (existingUsuario) {
+      throw new Error('Este e-mail já está cadastrado');
+    }
+
+    const senhaHashed = await hashSenha(dados.senha || '123456');
+
+    const novoId = await db.usuario.add({
+      empresa_id: empresa.id,
+      nome: dados.nome.trim(),
+      email: emailLimpo,
+      senha_hash: senhaHashed,
+      perfil: dados.perfil || 'operador', // admin | responsavel | operador
+      ativo: true,
+      criado_em: new Date().toISOString(),
+    });
+
+    return await db.usuario.get(novoId);
   }
 
   function logout() {
@@ -129,7 +194,16 @@ export function AuthProvider({ children }) {
 
   return (
     <AuthContext.Provider
-      value={{ usuario, empresa, login, loginRapidoDemo, onboarding, logout, carregando }}
+      value={{
+        usuario,
+        empresa,
+        login,
+        loginRapidoDemo,
+        onboarding,
+        cadastrarUsuarioEquipe,
+        logout,
+        carregando,
+      }}
     >
       {children}
     </AuthContext.Provider>
