@@ -18,6 +18,7 @@ import Relatorios from './pages/Relatorios';
 import HistoricoMaquina from './pages/HistoricoMaquina';
 import HistoricoGeral from './pages/HistoricoGeral';
 import UsuariosEquipe from './pages/UsuariosEquipe';
+import Operadores from './pages/Operadores';
 import InstallPrompt from './components/InstallPrompt';
 
 import CatalogoIndex from './pages/catalogo/CatalogoIndex';
@@ -73,6 +74,7 @@ function AppRotas() {
       <Route path="/relatorios" element={<RotaProtegida><Relatorios /></RotaProtegida>} />
       <Route path="/historico" element={<RotaProtegida><HistoricoGeral /></RotaProtegida>} />
       <Route path="/usuarios" element={<RotaProtegida><UsuariosEquipe /></RotaProtegida>} />
+      <Route path="/operadores" element={<RotaProtegida><Operadores /></RotaProtegida>} />
 
 
       <Route path="/catalogos" element={<RotaProtegida><CatalogoIndex /></RotaProtegida>} />
