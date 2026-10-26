@@ -29,5 +29,9 @@ db.version(2).stores({
   catalogoSubstituicao: '++id, catalogo_peca_id, codigo_anterior',
 });
 
-export default db;
+db.version(3).stores({
+  operador: '++id, empresa_id, nome, status',
+  registroOperacao: '++id, empresa_id, operador_id, maquina_id, data_operacao, status_sincronizacao',
+});
 
+export default db;
