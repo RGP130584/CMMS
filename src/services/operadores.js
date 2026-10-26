@@ -1,5 +1,6 @@
 import db from '../db/database';
 import { enqueue } from './sync';
+import { recalcularStatus } from './maquinas';
 
 export async function listarOperadores(empresaId) {
   return db.operador.where('empresa_id').equals(empresaId).toArray();
@@ -121,6 +122,7 @@ export async function registrarOperacao(dados) {
     });
     await enqueue('operacao', { id, ...registro });
   });
+  await recalcularStatus(maquinaId);
   return { id, horas_operadas: horasOperadas };
 }
 
