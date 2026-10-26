@@ -67,18 +67,12 @@ export async function registrarOperacao(dados) {
   const duplicado = registros.some((r) => inicial < Number(r.horimetro_final) && final > Number(r.horimetro_inicial));
   if (duplicado) throw new Error('Este intervalo de horímetro já foi lançado para a máquina. Verifique o histórico.');
 
-  const anteriorMaisRecente = registros
-    .filter((r) => Number(r.horimetro_final) <= inicial)
-    .sort((a, b) => Number(b.horimetro_final) - Number(a.horimetro_final))[0];
-  const baseConhecida = anteriorMaisRecente
-    ? Number(anteriorMaisRecente.horimetro_final)
-    : Number(maquina.horimetro_atual || 0);
-
-  if (inicial !== baseConhecida) {
-    throw new Error(`O horímetro inicial precisa coincidir com a leitura de referência (${baseConhecida}). Confira o histórico antes de registrar.`);
+  const horimetroAtual = Number(maquina.horimetro_atual || 0);
+  if (inicial !== horimetroAtual) {
+    throw new Error(`O horímetro inicial deve ser igual ao valor atual da máquina (${horimetroAtual}). Atualize a leitura antes de registrar a operação.`);
   }
-  if (final < Number(maquina.horimetro_atual || 0)) {
-    throw new Error(`O horímetro final (${final}) é menor que o horímetro atual da máquina (${maquina.horimetro_atual}).`);
+  if (registros.some((r) => r.data_operacao === dados.data_operacao)) {
+    throw new Error('Já existe uma operação registrada para esta máquina nesta data. Confira o histórico antes de lançar novamente.');
   }
 
   const agora = new Date().toISOString();
